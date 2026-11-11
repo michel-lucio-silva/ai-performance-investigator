@@ -1,0 +1,40 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AI Performance Investigator</title>
+<style>
+body{font-family:Segoe UI,Arial;background:#101827;color:#f3f5fa;margin:0;padding:40px}
+main{max-width:850px;margin:auto}
+textarea{width:100%;box-sizing:border-box;min-height:180px;padding:15px;border-radius:8px}
+button{background:#3979ed;color:white;border:0;padding:14px 24px;border-radius:8px;cursor:pointer;margin-top:15px}
+pre{background:#202d42;padding:20px;white-space:pre-wrap;border-radius:8px}
+</style>
+</head>
+<body>
+<main>
+<h1>AI Performance Investigator</h1>
+<p>Investigacao de performance de APIs</p>
+<textarea id="input" placeholder="Digite os dados para analise..."></textarea>
+<button onclick="analyze()">Analisar com IA</button>
+<h2>Resultado</h2>
+<pre id="output">Aguardando analise...</pre>
+</main>
+<script>
+async function analyze(){
+ const output=document.getElementById('output');
+ output.textContent='Analisando...';
+ try{
+  const r=await fetch('/api/analyze',{
+   method:'POST',
+   headers:{'Content-Type':'application/json'},
+   body:JSON.stringify({text:document.getElementById('input').value})
+  });
+  const data=await r.json();
+  output.textContent=data.response || data.error || JSON.stringify(data);
+ }catch(e){output.textContent=e.message}
+}
+</script>
+</body>
+</html>
